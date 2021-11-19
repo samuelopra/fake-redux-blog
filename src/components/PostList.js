@@ -1,21 +1,16 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import { fetchPosts } from "../actions";
-const PostList = ({ posts, fetchPosts }) => {
+import { fetchPostsAndUsers } from "../actions";
+import UserHeader from "./UserHeader";
+const PostList = ({ posts, fetchPostsAndUsers }) => {
   useEffect(() => {
-    const getAllPosts = async () => {
-      return fetchPosts();
-    };
-
-    getAllPosts();
-  }, [fetchPosts]);
-
-  console.log(posts);
+    fetchPostsAndUsers();
+  }, [fetchPostsAndUsers]);
 
   if (!posts) {
-    return <div>No posts</div>;
+    return null;
   }
-  const renderedPosts = posts.map(({ id, title, body }) => {
+  const renderedPosts = posts.map(({ id, title, body, userId }) => {
     return (
       <div className="item" key={id}>
         <i className="large middle aligned icon user" />
@@ -24,6 +19,7 @@ const PostList = ({ posts, fetchPosts }) => {
             <h2>{title}</h2>
             <p>{body}</p>
           </div>
+          <UserHeader userId={userId} />
         </div>
       </div>
     );
@@ -36,4 +32,4 @@ const mapStateToProps = (state) => {
   return state;
 };
 
-export default connect(mapStateToProps, { fetchPosts: fetchPosts })(PostList);
+export default connect(mapStateToProps, { fetchPostsAndUsers })(PostList);
